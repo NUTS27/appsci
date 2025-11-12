@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoTrack - Your Daily Environmental Companion</title>
+  <title>App Innovation for the Environment</title>
   <style>
     * {
       margin: 0;
@@ -13,14 +13,42 @@
     }
 
     body {
-      display: flex;
       background: #eaf4ee;
       color: #2d3436;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* Sidebar */
+    /* Top App Bar */
+    .app-bar {
+      background: #52b788;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .app-bar h1 {
+      font-size: 1.2em;
+      margin: 0;
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    /* Sidebar for Desktop */
     .sidebar {
       width: 250px;
       background: #1b4332;
@@ -28,20 +56,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 20px;
-      transition: width 0.3s ease;
+      padding-top: 80px; /* Space for app bar */
       height: 100vh;
       position: fixed;
-    }
-
-    .sidebar.hidden {
-      width: 0;
-      overflow: hidden;
+      left: 0;
+      top: 0;
+      z-index: 999;
     }
 
     .sidebar h2 {
       margin-bottom: 30px;
-      font-size: 1.5em;
+      font-size: 1.4em;
       text-align: center;
     }
 
@@ -49,10 +74,11 @@
       display: block;
       color: white;
       text-decoration: none;
-      padding: 15px 20px;
+      padding: 14px 20px;
       width: 100%;
       text-align: left;
       transition: 0.3s;
+      font-size: 0.95em;
     }
 
     .menu a:hover, .menu a.active {
@@ -63,44 +89,14 @@
     /* Main Content */
     .main {
       margin-left: 250px;
+      margin-top: 70px; /* Space for app bar */
+      padding: 20px 30px;
       flex: 1;
-      padding: 20px 40px;
-      transition: margin-left 0.3s ease;
-    }
-
-    .main.full {
-      margin-left: 0;
-    }
-
-    header {
-      background: #52b788;
-      color: white;
-      padding: 15px 25px;
-      border-radius: 10px;
-      font-size: 1.3em;
-      margin-bottom: 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .toggle-btn {
-      background: #40916c;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .toggle-btn:hover {
-      background: #2d6a4f;
     }
 
     .section {
       background: white;
-      padding: 25px;
+      padding: 20px;
       border-radius: 15px;
       margin-bottom: 25px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -109,11 +105,22 @@
     h3 {
       color: #1b4332;
       margin-bottom: 10px;
+      font-size: 1.2em;
     }
 
     p {
       margin-bottom: 10px;
       line-height: 1.6;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0;
     }
 
     .progress {
@@ -127,29 +134,13 @@
 
     .progress-bar {
       height: 25px;
-      width: 60%;
+      width: 70%;
       background: #2d6a4f;
       color: white;
       text-align: center;
       font-weight: bold;
       line-height: 25px;
       transition: width 1s ease;
-    }
-
-    .goal-list, .tips-list {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    .goal-list li, .tips-list li {
-      padding: 10px;
-      border-bottom: 1px solid #d9d9d9;
-    }
-
-    .leaderboard {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
     }
 
     .leaderboard .user {
@@ -159,6 +150,7 @@
       padding: 10px;
       border-radius: 8px;
       border: 1px solid #cce3d3;
+      margin-bottom: 8px;
     }
 
     footer {
@@ -169,102 +161,217 @@
       font-size: 0.9em;
     }
 
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 200px;
-      }
-      .main {
-        margin-left: 200px;
-      }
+    /* Mobile Overlay Menu */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1001;
+      display: none;
     }
 
-    @media (max-width: 600px) {
+    .overlay.show {
+      display: block;
+    }
+
+    .overlay-menu {
+      background: #1b4332;
+      color: white;
+      width: 250px;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding-top: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .overlay-menu h2 {
+      margin-bottom: 30px;
+      font-size: 1.4em;
+    }
+
+    .overlay-menu .menu a {
+      padding: 14px 20px;
+      width: 100%;
+      text-align: left;
+    }
+
+    /* Bottom Tabs for Mobile */
+    .bottom-tabs {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #52b788;
+      color: white;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1000;
+    }
+
+    .tab {
+      text-decoration: none;
+      color: white;
+      font-size: 0.9em;
+      text-align: center;
+      flex: 1;
+    }
+
+    .tab.active {
+      background: #40916c;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    /* 📱 Responsive for Phone */
+    @media (max-width: 768px) {
       .sidebar {
         display: none;
       }
+
       .main {
-        margin: 0;
+        margin-left: 0;
+        margin-top: 70px;
+        padding: 15px;
+      }
+
+      .bottom-tabs {
+        display: flex;
+      }
+
+      .app-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+
+      .section {
+        padding: 15px;
       }
     }
+
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar">
+  <!-- Top App Bar -->
+  <div class="app-bar">
+    <h1>🌿 EcoTrack</h1>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+  </div>
+
+  <!-- Sidebar for Desktop -->
+  <div class="sidebar">
     <h2>🌿 EcoTrack</h2>
     <div class="menu">
       <a href="#home" class="active">🏠 Home</a>
       <a href="#mission">🌱 Mission & Vision</a>
       <a href="#goals">🎯 Goals</a>
       <a href="#tracker">📊 Tracker</a>
-      <a href="#features">⚙️ App Features</a>
+      <a href="#features">⚙️ Features</a>
       <a href="#impact">🌍 Impact</a>
       <a href="#leaderboard">🏆 Leaderboard</a>
       <a href="#about">ℹ️ About</a>
     </div>
   </div>
 
+  <!-- Mobile Overlay Menu -->
+  <div class="overlay" id="overlay">
+    <div class="overlay-menu">
+      <h2>🌿 EcoTrack</h2>
+      <div class="menu">
+        <a href="#home" onclick="closeMenu()">🏠 Home</a>
+        <a href="#mission" onclick="closeMenu()">🌱 Mission & Vision</a>
+        <a href="#goals" onclick="closeMenu()">🎯 Goals</a>
+        <a href="#tracker" onclick="closeMenu()">📊 Tracker</a>
+        <a href="#features" onclick="closeMenu()">⚙️ Features</a>
+        <a href="#impact" onclick="closeMenu()">🌍 Impact</a>
+        <a href="#leaderboard" onclick="closeMenu()">🏆 Leaderboard</a>
+        <a href="#about" onclick="closeMenu()">ℹ️ About</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Tabs for Mobile -->
+  <div class="bottom-tabs">
+    <a href="#home" class="tab active">🏠 Home</a>
+    <a href="#goals" class="tab">🎯 Goals</a>
+    <a href="#tracker" class="tab">📊 Tracker</a>
+    <a href="#leaderboard" class="tab">🏆 Board</a>
+  </div>
+
   <!-- Main Content -->
-  <div class="main" id="main">
-    <header>
-      <span>EcoTrack – Your Daily Environmental Companion</span>
-      <button class="toggle-btn" onclick="toggleSidebar()">☰ Menu</button>
-    </header>
+  <div class="main">
 
     <div id="home" class="section">
-      <h3>🌍 Welcome to EcoTrack</h3>
-      <p><b>EcoTrack</b> is a digital app prototype that promotes environmental awareness and sustainability through interactive tracking, education, and community engagement.</p>
-      <p>By combining technology with environmental science, EcoTrack empowers individuals to take simple actions that make a big difference for the planet.</p>
+      <h3>🌍 Welcome to App Innovation for the Environment</h3>
+      <p><b>App Title:</b> EcoTrack – Your Daily Environmental Companion</p>
+      <p><b>Purpose:</b> This app helps individuals track eco-friendly habits, learn sustainable tips, and monitor personal environmental impact to promote sustainability.</p>
+      <p><b>Environmental Problem Addressed:</b> Increasing pollution, waste, and resource depletion due to unsustainable daily habits.</p>
+      <p><b>Target Users:</b> Everyday individuals, students, and families interested in environmental awareness and action.</p>
+      <p>It encourages small actions for big change.</p>
     </div>
 
     <div id="mission" class="section">
       <h3>🌱 Mission & Vision</h3>
-      <p><b>Mission:</b> To inspire individuals to practice eco-friendly habits and reduce their environmental footprint through daily digital guidance.</p>
-      <p><b>Vision:</b> A world where technology helps every person live sustainably — protecting nature, conserving resources, and creating a greener tomorrow.</p>
+      <p><b>Mission:</b> Empower individuals to live sustainably by providing daily eco-guidance and habit tracking through technology.</p>
+      <p><b>Vision:</b> A connected global community that uses innovation to build a cleaner, greener future for everyone.</p>
     </div>
 
     <div id="goals" class="section">
       <h3>🎯 Sustainable Goals</h3>
-      <ul class="goal-list">
-        <li>🌿 Reduce waste by reusing and recycling items</li>
-        <li>🚲 Encourage walking and biking to reduce carbon emissions</li>
-        <li>🔋 Promote energy and water conservation at home</li>
-        <li>🌳 Support reforestation and community clean-up drives</li>
-        <li>🍃 Educate users on the importance of sustainable living</li>
+      <p>Today's Challenge: ♻️ Recycle and reuse at least 50% of household waste</p>
+      <button onclick="completeChallenge()">Mark as Completed</button>
+      <p id="challenge-status">Status: Not Completed</p>
+      <ul>
+        <li>♻️ Recycle and reuse at least 50% of household waste</li>
+        <li>🚶 Walk or bike short distances to save energy</li>
+        <li>🔋 Reduce daily energy usage by unplugging idle devices</li>
+        <li>💧 Save water through mindful usage</li>
+        <li>🌳 Participate in tree planting and local eco projects</li>
       </ul>
     </div>
 
     <div id="tracker" class="section">
       <h3>📊 Eco Progress Tracker</h3>
-      <p>Track your weekly eco-habits and see your progress in real time. Completing daily eco actions increases your personal EcoScore!</p>
+      <p>Track your progress through your <b>EcoScore</b>. Each time you complete an eco goal, your score increases!</p>
       <div class="progress">
-        <div class="progress-bar">60%</div>
+        <div class="progress-bar" id="progress-bar">70%</div>
       </div>
-      <p>Keep it up! You’re 40% away from your weekly sustainability goal!</p>
+      <p>You’re on track to reach your sustainability target this week — keep it up!</p>
+      <button onclick="logAction()">Log Eco Action</button>
+      <p id="score-display">Current Score: 70</p>
     </div>
 
     <div id="features" class="section">
       <h3>⚙️ App Features</h3>
-      <ul class="tips-list">
-        <li><b>Habit Tracker:</b> Monitors your daily eco-friendly actions.</li>
-        <li><b>Eco Tips Section:</b> Provides sustainable lifestyle advice.</li>
-        <li><b>Leaderboard:</b> Encourages friendly competition between users.</li>
-        <li><b>Impact Dashboard:</b> Displays total environmental contributions (like CO₂ saved or trees equivalent).</li>
-        <li><b>Community Page:</b> Connects users for group challenges or clean-up events.</li>
+      <ul>
+        <li><b>EcoScore Tracker:</b> Monitors your completed eco-goals.</li>
+        <li><b>Daily Eco Challenges:</b> Encourages you to form consistent green habits.</li>
+        <li><b>Educational Tips:</b> Learn new ways to reduce waste and save resources.</li>
+        <li><b>Community Dashboard:</b> Connect with other eco-conscious users.</li>
+        <li><b>Achievements:</b> Unlock digital badges for completing milestones.</li>
       </ul>
     </div>
 
     <div id="impact" class="section">
       <h3>🌍 Environmental Impact</h3>
-      <p><b>EcoTrack</b> educates users on the power of small consistent actions. Each goal completed contributes to:</p>
-      <ul class="goal-list">
-        <li>🌾 Reducing carbon footprint and pollution</li>
-        <li>🌊 Conserving water and energy resources</li>
-        <li>🪴 Promoting responsible consumption and waste management</li>
-        <li>🐝 Protecting biodiversity through eco-awareness</li>
+      <p>EcoTrack inspires a collective movement toward sustainability by educating users on eco-friendly living and tracking tangible impact metrics such as:</p>
+      <ul>
+        <li>🌿 Reduction in personal carbon footprint</li>
+        <li>💧 Water and energy conservation</li>
+        <li>🪴 Waste reduction through recycling</li>
+        <li>🐝 Awareness on biodiversity protection</li>
       </ul>
-      <p>Our vision is to turn awareness into action — empowering communities to live sustainably.</p>
+      <p>Through data-driven motivation, users see the real-world effects of their eco actions.</p>
     </div>
 
     <div id="leaderboard" class="section">
@@ -274,16 +381,15 @@
         <div class="user"><span>2. James Earth</span><span>870 pts</span></div>
         <div class="user"><span>3. Lea Tree</span><span>760 pts</span></div>
         <div class="user"><span>4. Daniel Eco</span><span>650 pts</span></div>
-        <div class="user"><span>5. Sofia Blue</span><span>590 pts</span></div>
       </div>
     </div>
 
     <div id="about" class="section">
       <h3>ℹ️ About the App</h3>
-      <p><b>Purpose:</b> To motivate people to take action for the environment using accessible web-based technology.</p>
+      <p><b>Purpose:</b> This app was designed to promote sustainability using technology and to show how small digital steps can lead to global change.</p>
       <p><b>Developed by:</b> Students for the project “App Innovation for the Environment.”</p>
-      <p><b>Built with:</b> HTML, CSS, and JavaScript (Prototype Only)</p>
-      <p><b>Lesson Learned:</b> We discovered how technology can make a positive environmental impact by promoting awareness, accountability, and collective effort toward sustainability.</p>
+      <p><b>Built with:</b> HTML, CSS, and JavaScript (prototype only).</p>
+      <p><b>Lesson Learned:</b> We learned how creativity and technology can combine to solve real environmental problems, promote teamwork, and inspire eco-awareness.</p>
     </div>
 
     <footer>
@@ -292,12 +398,55 @@
   </div>
 
   <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const main = document.getElementById('main');
-      sidebar.classList.toggle('hidden');
-      main.classList.toggle('full');
+    let ecoScore = parseInt(localStorage.getItem('ecoScore')) || 70;
+    let challengeCompleted = localStorage.getItem('challengeCompleted') === 'true';
+
+    function toggleMenu() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.toggle('show');
     }
+
+    function closeMenu() {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.remove('show');
+    }
+
+    function logAction() {
+      ecoScore += 10;
+      if (ecoScore > 100) ecoScore = 100;
+      localStorage.setItem('ecoScore', ecoScore);
+      updateProgress();
+    }
+
+    function completeChallenge() {
+      if (!challengeCompleted) {
+        challengeCompleted = true;
+        localStorage.setItem('challengeCompleted', 'true');
+        ecoScore += 20;
+        if (ecoScore > 100) ecoScore = 100;
+        localStorage.setItem('ecoScore', ecoScore);
+        updateProgress();
+        updateChallengeStatus();
+      }
+    }
+
+    function updateProgress() {
+      const progressBar = document.getElementById('progress-bar');
+      const scoreDisplay = document.getElementById('score-display');
+      progressBar.style.width = ecoScore + '%';
+      progressBar.textContent = ecoScore + '%';
+      scoreDisplay.textContent = 'Current Score: ' + ecoScore;
+    }
+
+    function updateChallengeStatus() {
+      const status = document.getElementById('challenge-status');
+      status.textContent = challengeCompleted ? 'Status: Completed' : 'Status: Not Completed';
+    }
+
+    window.onload = function() {
+      updateProgress();
+      updateChallengeStatus();
+    };
   </script>
 
 </body>
