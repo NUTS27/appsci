@@ -1,453 +1,813 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App Innovation for the Environment</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoPath - Your Personal Journey to Sustainability</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    body {
-      background: #eaf4ee;
-      color: #2d3436;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+        body {
+            background-color: #f5f9f5;
+            color: #333;
+            line-height: 1.6;
+        }
 
-    /* Top App Bar */
-    .app-bar {
-      background: #52b788;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow-x: hidden;
+        }
 
-    .app-bar h1 {
-      font-size: 1.2em;
-      margin: 0;
-    }
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-    .menu-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5em;
-      cursor: pointer;
-    }
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
 
-    /* Sidebar for Desktop */
-    .sidebar {
-      width: 250px;
-      background: #1b4332;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 80px; /* Space for app bar */
-      height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      z-index: 999;
-    }
+        .logo-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
 
-    .sidebar h2 {
-      margin-bottom: 30px;
-      font-size: 1.4em;
-      text-align: center;
-    }
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
 
-    .menu a {
-      display: block;
-      color: white;
-      text-decoration: none;
-      padding: 14px 20px;
-      width: 100%;
-      text-align: left;
-      transition: 0.3s;
-      font-size: 0.95em;
-    }
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
 
-    .menu a:hover, .menu a.active {
-      background: #40916c;
-      border-left: 5px solid #95d5b2;
-    }
+        /* Navigation Styles */
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            padding: 10px 0;
+            border-top: 1px solid #e0e0e0;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+        }
 
-    /* Main Content */
-    .main {
-      margin-left: 250px;
-      margin-top: 70px; /* Space for app bar */
-      padding: 20px 30px;
-      flex: 1;
-    }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #757575;
+            padding: 5px 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
 
-    .section {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 25px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+        .nav-item.active {
+            color: #4CAF50;
+        }
 
-    h3 {
-      color: #1b4332;
-      margin-bottom: 10px;
-      font-size: 1.2em;
-    }
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
 
-    p {
-      margin-bottom: 10px;
-      line-height: 1.6;
-    }
+        /* Screen Styles */
+        .screen {
+            padding: 20px;
+            display: none;
+        }
 
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
+        .screen.active {
+            display: block;
+        }
 
-    li {
-      padding: 8px 0;
-      border-bottom: 1px solid #e0e0e0;
-    }
+        /* Welcome Screen */
+        .welcome-screen {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-    .progress {
-      background: #d8f3dc;
-      border-radius: 25px;
-      overflow: hidden;
-      height: 25px;
-      max-width: 400px;
-      margin: 15px 0;
-    }
+        .app-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
 
-    .progress-bar {
-      height: 25px;
-      width: 70%;
-      background: #2d6a4f;
-      color: white;
-      text-align: center;
-      font-weight: bold;
-      line-height: 25px;
-      transition: width 1s ease;
-    }
+        .welcome-screen h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
 
-    .leaderboard .user {
-      display: flex;
-      justify-content: space-between;
-      background: #f0fdf4;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #cce3d3;
-      margin-bottom: 8px;
-    }
+        .welcome-screen p {
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
 
-    footer {
-      text-align: center;
-      color: #555;
-      padding: 15px;
-      margin-top: 30px;
-      font-size: 0.9em;
-    }
+        .btn {
+            background-color: white;
+            color: #2E7D32;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    /* Mobile Overlay Menu */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1001;
-      display: none;
-    }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
 
-    .overlay.show {
-      display: block;
-    }
+        /* Dashboard Screen */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-    .overlay-menu {
-      background: #1b4332;
-      color: white;
-      width: 250px;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
-      padding-top: 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .dashboard-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2E7D32;
+        }
 
-    .overlay-menu h2 {
-      margin-bottom: 30px;
-      font-size: 1.4em;
-    }
+        .carbon-score {
+            background-color: #E8F5E9;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
 
-    .overlay-menu .menu a {
-      padding: 14px 20px;
-      width: 100%;
-      text-align: left;
-    }
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2E7D32;
+            margin: 10px 0;
+        }
 
-    /* Bottom Tabs for Mobile */
-    .bottom-tabs {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #52b788;
-      color: white;
-      justify-content: space-around;
-      padding: 10px 0;
-      z-index: 1000;
-    }
+        .score-label {
+            font-size: 14px;
+            color: #757575;
+        }
 
-    .tab {
-      text-decoration: none;
-      color: white;
-      font-size: 0.9em;
-      text-align: center;
-      flex: 1;
-    }
+        .progress-container {
+            margin: 15px 0;
+        }
 
-    .tab.active {
-      background: #40916c;
-      padding: 10px;
-      border-radius: 5px;
-    }
+        .progress-bar {
+            height: 8px;
+            background-color: #E0E0E0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
 
-    /* 📱 Responsive for Phone */
-    @media (max-width: 768px) {
-      .sidebar {
-        display: none;
-      }
+        .progress {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 30%;
+            border-radius: 4px;
+        }
 
-      .main {
-        margin-left: 0;
-        margin-top: 70px;
-        padding: 15px;
-      }
+        .progress-text {
+            font-size: 12px;
+            color: #757575;
+            text-align: right;
+        }
 
-      .bottom-tabs {
-        display: flex;
-      }
+        .footprint-categories {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
-      .app-bar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-      }
+        .category {
+            background-color: #F1F8E9;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
 
-      .section {
-        padding: 15px;
-      }
-    }
+        .category-icon {
+            font-size: 24px;
+            color: #4CAF50;
+            margin-bottom: 8px;
+        }
 
-  </style>
+        .category-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .category-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2E7D32;
+        }
+
+        /* Actions Screen */
+        .actions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2E7D32;
+        }
+
+        .action-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .action-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #4CAF50;
+        }
+
+        .action-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .action-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .action-location {
+            font-size: 12px;
+            color: #757575;
+            display: flex;
+            align-items: center;
+        }
+
+        .location-icon {
+            margin-right: 5px;
+        }
+
+        .action-points {
+            background-color: #FFC107;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .action-description {
+            font-size: 14px;
+            color: #616161;
+            margin-bottom: 10px;
+        }
+
+        .action-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #2E7D32;
+        }
+
+        /* Rewards Screen */
+        .rewards-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .points-balance {
+            background: linear-gradient(135deg, #FFC107, #FF9800);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .points-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .rewards-catalog {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .reward-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .reward-image {
+            height: 100px;
+            background-color: #E8F5E9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #4CAF50;
+        }
+
+        .reward-details {
+            padding: 15px;
+        }
+
+        .reward-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .reward-description {
+            font-size: 12px;
+            color: #757575;
+            margin-bottom: 10px;
+        }
+
+        .reward-points {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .points-required {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FF9800;
+        }
+
+        .redeem-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Profile Screen */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            margin-right: 15px;
+        }
+
+        .profile-info h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background-color: #E8F5E9;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2E7D32;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #757575;
+        }
+
+        .menu-list {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-item {
+            padding: 15px;
+            border-bottom: 1px solid #F5F5F5;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: #F5F5F5;
+        }
+
+        .menu-icon {
+            margin-right: 15px;
+            font-size: 20px;
+            color: #4CAF50;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="screen welcome-screen active" id="welcome-screen">
+            <div class="app-icon">🌱</div>
+            <h2>Welcome to EcoPath</h2>
+            <p>Your Personal Journey to Sustainability</p>
+            <p>Track your footprint, discover local actions, and earn rewards for a healthier planet.</p>
+            <button class="btn" onclick="showScreen('dashboard-screen')">Start Your EcoPath</button>
+        </div>
 
-  <!-- Top App Bar -->
-  <div class="app-bar">
-    <h1>🌿 EcoTrack</h1>
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-  </div>
+        <!-- App Header -->
+        <header class="hidden" id="app-header">
+            <div class="logo">
+                <div class="logo-icon">🌱</div>
+                <h1>EcoPath</h1>
+            </div>
+            <p class="subtitle">Gamifying Local Environmental Action</p>
+        </header>
 
-  <!-- Sidebar for Desktop -->
-  <div class="sidebar">
-    <h2>🌿 EcoTrack</h2>
-    <div class="menu">
-      <a href="#home" class="active">🏠 Home</a>
-      <a href="#mission">🌱 Mission & Vision</a>
-      <a href="#goals">🎯 Goals</a>
-      <a href="#tracker">📊 Tracker</a>
-      <a href="#features">⚙️ Features</a>
-      <a href="#impact">🌍 Impact</a>
-      <a href="#leaderboard">🏆 Leaderboard</a>
-      <a href="#about">ℹ️ About</a>
+        <!-- Dashboard Screen -->
+        <div class="screen dashboard-screen hidden" id="dashboard-screen">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Carbon Footprint</h2>
+                <div class="user-points">125 pts</div>
+            </div>
+            
+            <div class="carbon-score">
+                <div class="score-label">Your Weekly Carbon Score</div>
+                <div class="score-value">45 kg CO2e</div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="progress-text">30% to your weekly reduction goal!</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 15px; color: #2E7D32;">Footprint Breakdown</h3>
+            <div class="footprint-categories">
+                <div class="category">
+                    <div class="category-icon">🚗</div>
+                    <div class="category-name">Travel</div>
+                    <div class="category-value">18 kg</div>
+                </div>
+                <div class="category">
+                    <div class="category-icon">🍽️</div>
+                    <div class="category-name">Food</div>
+                    <div class="category-value">12 kg</div>
+                </div>
+                <div class="category">
+                    <div class="category-icon">🏠</div>
+                    <div class="category-name">Home</div>
+                    <div class="category-value">10 kg</div>
+                </div>
+                <div class="category">
+                    <div class="category-icon">🗑️</div>
+                    <div class="category-name">Waste</div>
+                    <div class="category-value">5 kg</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Screen -->
+        <div class="screen actions-screen hidden" id="actions-screen">
+            <div class="actions-header">
+                <h2 class="section-title">Local Actions</h2>
+                <div class="filter-btn">Filter</div>
+            </div>
+            
+            <div class="action-feed">
+                <div class="action-card">
+                    <div class="action-header">
+                        <div>
+                            <div class="action-title">Clean-up Crew</div>
+                            <div class="action-location">
+                                <span class="location-icon">📍</span> Riverside Park, 2 km away
+                            </div>
+                        </div>
+                        <div class="action-points">50 pts</div>
+                    </div>
+                    <div class="action-description">
+                        Join a park clean-up this Saturday. Help remove litter and protect local wildlife.
+                    </div>
+                    <button class="action-btn">Join Event</button>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-header">
+                        <div>
+                            <div class="action-title">Plastic-Free Challenge</div>
+                            <div class="action-location">
+                                <span class="location-icon">📍</span> Your Neighborhood
+                            </div>
+                        </div>
+                        <div class="action-points">20 pts</div>
+                    </div>
+                    <div class="action-description">
+                        Avoid single-use plastic bottles for 3 days. Log your success to earn points.
+                    </div>
+                    <button class="action-btn">Start Challenge</button>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-header">
+                        <div>
+                            <div class="action-title">Local Special</div>
+                            <div class="action-location">
+                                <span class="location-icon">📍</span> Green Grocer, Main St.
+                            </div>
+                        </div>
+                        <div class="action-points">10 pts</div>
+                    </div>
+                    <div class="action-description">
+                        Get 10% discount if you bring your own containers today. Support local eco-businesses.
+                    </div>
+                    <button class="action-btn">View Deal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rewards Screen -->
+        <div class="screen rewards-screen hidden" id="rewards-screen">
+            <div class="rewards-header">
+                <h2 class="section-title">EcoPoints & Rewards</h2>
+                <div class="history-btn">History</div>
+            </div>
+            
+            <div class="points-balance">
+                <div class="score-label">Your EcoPoints Balance</div>
+                <div class="points-value">350</div>
+                <div class="progress-text">Keep going! You're making a difference.</div>
+            </div>
+            
+            <h3 style="margin-bottom: 15px; color: #2E7D32;">Available Rewards</h3>
+            <div class="rewards-catalog">
+                <div class="reward-card">
+                    <div class="reward-image">🌳</div>
+                    <div class="reward-details">
+                        <div class="reward-title">Plant a Tree</div>
+                        <div class="reward-description">We'll plant a tree in your name</div>
+                        <div class="reward-points">
+                            <div class="points-required">100 pts</div>
+                            <button class="redeem-btn">Redeem</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-image">🛍️</div>
+                    <div class="reward-details">
+                        <div class="reward-title">Eco-Shop Voucher</div>
+                        <div class="reward-description">$5 voucher for local eco-store</div>
+                        <div class="reward-points">
+                            <div class="points-required">500 pts</div>
+                            <button class="redeem-btn">Redeem</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-image">👕</div>
+                    <div class="reward-details">
+                        <div class="reward-title">EcoPath T-shirt</div>
+                        <div class="reward-description">Organic cotton, exclusive design</div>
+                        <div class="reward-points">
+                            <div class="points-required">1000 pts</div>
+                            <button class="redeem-btn">Redeem</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reward-card">
+                    <div class="reward-image">📚</div>
+                    <div class="reward-details">
+                        <div class="reward-title">Eco Education</div>
+                        <div class="reward-description">Online course on sustainability</div>
+                        <div class="reward-points">
+                            <div class="points-required">800 pts</div>
+                            <button class="redeem-btn">Redeem</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div class="screen profile-screen hidden" id="profile-screen">
+            <div class="profile-header">
+                <div class="profile-avatar">JD</div>
+                <div class="profile-info">
+                    <h2>Jane Doe</h2>
+                    <p>EcoPath Enthusiast</p>
+                    <p>Level 5 EcoWarrior</p>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">45 kg</div>
+                    <div class="stat-label">CO2 Reduced</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Actions Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">350</div>
+                    <div class="stat-label">EcoPoints</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Trees Planted</div>
+                </div>
+            </div>
+            
+            <div class="menu-list">
+                <div class="menu-item">
+                    <div class="menu-icon">⚙️</div>
+                    <div>Settings</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📊</div>
+                    <div>My Progress</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">👥</div>
+                    <div>Invite Friends</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">❓</div>
+                    <div>Help & Support</div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-icon">📝</div>
+                    <div>Feedback</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="hidden" id="app-nav">
+            <div class="nav-item active" onclick="showScreen('dashboard-screen')">
+                <i>📊</i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('actions-screen')">
+                <i>🌍</i>
+                <span>Actions</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('rewards-screen')">
+                <i>🏆</i>
+                <span>Rewards</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('profile-screen')">
+                <i>👤</i>
+                <span>Profile</span>
+            </div>
+        </nav>
     </div>
-  </div>
 
-  <!-- Mobile Overlay Menu -->
-  <div class="overlay" id="overlay">
-    <div class="overlay-menu">
-      <h2>🌿 EcoTrack</h2>
-      <div class="menu">
-        <a href="#home" onclick="closeMenu()">🏠 Home</a>
-        <a href="#mission" onclick="closeMenu()">🌱 Mission & Vision</a>
-        <a href="#goals" onclick="closeMenu()">🎯 Goals</a>
-        <a href="#tracker" onclick="closeMenu()">📊 Tracker</a>
-        <a href="#features" onclick="closeMenu()">⚙️ Features</a>
-        <a href="#impact" onclick="closeMenu()">🌍 Impact</a>
-        <a href="#leaderboard" onclick="closeMenu()">🏆 Leaderboard</a>
-        <a href="#about" onclick="closeMenu()">ℹ️ About</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bottom Tabs for Mobile -->
-  <div class="bottom-tabs">
-    <a href="#home" class="tab active">🏠 Home</a>
-    <a href="#goals" class="tab">🎯 Goals</a>
-    <a href="#tracker" class="tab">📊 Tracker</a>
-    <a href="#leaderboard" class="tab">🏆 Board</a>
-  </div>
-
-  <!-- Main Content -->
-  <div class="main">
-
-    <div id="home" class="section">
-      <h3>🌍 Welcome to App Innovation for the Environment</h3>
-      <p><b>App Title:</b> EcoTrack – Your Daily Environmental Companion</p>
-      <p><b>Purpose:</b> This app helps individuals track eco-friendly habits, learn sustainable tips, and monitor personal environmental impact to promote sustainability.</p>
-      <p><b>Environmental Problem Addressed:</b> Increasing pollution, waste, and resource depletion due to unsustainable daily habits.</p>
-      <p><b>Target Users:</b> Everyday individuals, students, and families interested in environmental awareness and action.</p>
-      <p>It encourages small actions for big change.</p>
-    </div>
-
-    <div id="mission" class="section">
-      <h3>🌱 Mission & Vision</h3>
-      <p><b>Mission:</b> Empower individuals to live sustainably by providing daily eco-guidance and habit tracking through technology.</p>
-      <p><b>Vision:</b> A connected global community that uses innovation to build a cleaner, greener future for everyone.</p>
-    </div>
-
-    <div id="goals" class="section">
-      <h3>🎯 Sustainable Goals</h3>
-      <p>Today's Challenge: ♻️ Recycle and reuse at least 50% of household waste</p>
-      <button onclick="completeChallenge()">Mark as Completed</button>
-      <p id="challenge-status">Status: Not Completed</p>
-      <ul>
-        <li>♻️ Recycle and reuse at least 50% of household waste</li>
-        <li>🚶 Walk or bike short distances to save energy</li>
-        <li>🔋 Reduce daily energy usage by unplugging idle devices</li>
-        <li>💧 Save water through mindful usage</li>
-        <li>🌳 Participate in tree planting and local eco projects</li>
-      </ul>
-    </div>
-
-    <div id="tracker" class="section">
-      <h3>📊 Eco Progress Tracker</h3>
-      <p>Track your progress through your <b>EcoScore</b>. Each time you complete an eco goal, your score increases!</p>
-      <div class="progress">
-        <div class="progress-bar" id="progress-bar">70%</div>
-      </div>
-      <p>You’re on track to reach your sustainability target this week — keep it up!</p>
-      <button onclick="logAction()">Log Eco Action</button>
-      <p id="score-display">Current Score: 70</p>
-    </div>
-
-    <div id="features" class="section">
-      <h3>⚙️ App Features</h3>
-      <ul>
-        <li><b>EcoScore Tracker:</b> Monitors your completed eco-goals.</li>
-        <li><b>Daily Eco Challenges:</b> Encourages you to form consistent green habits.</li>
-        <li><b>Educational Tips:</b> Learn new ways to reduce waste and save resources.</li>
-        <li><b>Community Dashboard:</b> Connect with other eco-conscious users.</li>
-        <li><b>Achievements:</b> Unlock digital badges for completing milestones.</li>
-      </ul>
-    </div>
-
-    <div id="impact" class="section">
-      <h3>🌍 Environmental Impact</h3>
-      <p>EcoTrack inspires a collective movement toward sustainability by educating users on eco-friendly living and tracking tangible impact metrics such as:</p>
-      <ul>
-        <li>🌿 Reduction in personal carbon footprint</li>
-        <li>💧 Water and energy conservation</li>
-        <li>🪴 Waste reduction through recycling</li>
-        <li>🐝 Awareness on biodiversity protection</li>
-      </ul>
-      <p>Through data-driven motivation, users see the real-world effects of their eco actions.</p>
-    </div>
-
-    <div id="leaderboard" class="section">
-      <h3>🏆 Top Eco Heroes</h3>
-      <div class="leaderboard">
-        <div class="user"><span>1. Maria Green</span><span>980 pts</span></div>
-        <div class="user"><span>2. James Earth</span><span>870 pts</span></div>
-        <div class="user"><span>3. Lea Tree</span><span>760 pts</span></div>
-        <div class="user"><span>4. Daniel Eco</span><span>650 pts</span></div>
-      </div>
-    </div>
-
-    <div id="about" class="section">
-      <h3>ℹ️ About the App</h3>
-      <p><b>Purpose:</b> This app was designed to promote sustainability using technology and to show how small digital steps can lead to global change.</p>
-      <p><b>Developed by:</b> Students for the project “App Innovation for the Environment.”</p>
-      <p><b>Built with:</b> HTML, CSS, and JavaScript (prototype only).</p>
-      <p><b>Lesson Learned:</b> We learned how creativity and technology can combine to solve real environmental problems, promote teamwork, and inspire eco-awareness.</p>
-    </div>
-
-    <footer>
-      © 2025 EcoTrack | App Innovation for the Environment Project
-    </footer>
-  </div>
-
-  <script>
-    let ecoScore = parseInt(localStorage.getItem('ecoScore')) || 70;
-    let challengeCompleted = localStorage.getItem('challengeCompleted') === 'true';
-
-    function toggleMenu() {
-      const overlay = document.getElementById('overlay');
-      overlay.classList.toggle('show');
-    }
-
-    function closeMenu() {
-      const overlay = document.getElementById('overlay');
-      overlay.classList.remove('show');
-    }
-
-    function logAction() {
-      ecoScore += 10;
-      if (ecoScore > 100) ecoScore = 100;
-      localStorage.setItem('ecoScore', ecoScore);
-      updateProgress();
-    }
-
-    function completeChallenge() {
-      if (!challengeCompleted) {
-        challengeCompleted = true;
-        localStorage.setItem('challengeCompleted', 'true');
-        ecoScore += 20;
-        if (ecoScore > 100) ecoScore = 100;
-        localStorage.setItem('ecoScore', ecoScore);
-        updateProgress();
-        updateChallengeStatus();
-      }
-    }
-
-    function updateProgress() {
-      const progressBar = document.getElementById('progress-bar');
-      const scoreDisplay = document.getElementById('score-display');
-      progressBar.style.width = ecoScore + '%';
-      progressBar.textContent = ecoScore + '%';
-      scoreDisplay.textContent = 'Current Score: ' + ecoScore;
-    }
-
-    function updateChallengeStatus() {
-      const status = document.getElementById('challenge-status');
-      status.textContent = challengeCompleted ? 'Status: Completed' : 'Status: Not Completed';
-    }
-
-    window.onload = function() {
-      updateProgress();
-      updateChallengeStatus();
-    };
-  </script>
-
+    <script>
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+                screen.classList.remove('active');
+            });
+            
+            // Show the selected screen
+            document.getElementById(screenId).classList.remove('hidden');
+            document.getElementById(screenId).classList.add('active');
+            
+            // Show app header and navigation if not on welcome screen
+            if (screenId !== 'welcome-screen') {
+                document.getElementById('app-header').classList.remove('hidden');
+                document.getElementById('app-nav').classList.remove('hidden');
+            } else {
+                document.getElementById('app-header').classList.add('hidden');
+                document.getElementById('app-nav').classList.add('hidden');
+            }
+            
+            // Update active nav item
+            if (screenId !== 'welcome-screen') {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Set the active nav item based on the screen
+                switch(screenId) {
+                    case 'dashboard-screen':
+                        document.querySelectorAll('.nav-item')[0].classList.add('active');
+                        break;
+                    case 'actions-screen':
+                        document.querySelectorAll('.nav-item')[1].classList.add('active');
+                        break;
+                    case 'rewards-screen':
+                        document.querySelectorAll('.nav-item')[2].classList.add('active');
+                        break;
+                    case 'profile-screen':
+                        document.querySelectorAll('.nav-item')[3].classList.add('active');
+                        break;
+                }
+            }
+        }
+    </script>
 </body>
 </html>
